@@ -1,0 +1,36 @@
+﻿@page "/"
+@inject IJSRuntime Jsr; // you can put this line in _Imports.razor instead
+
+<h1>Blazor Audio player</h1>
+
+<audio id="audioplayer" src="@Song" controls />
+<br/>
+<br />
+<br />
+
+<p>Click to play: <button id="soundButton" @onclick="@(() => PlaySound("./audio/Duffy - Mercy.mp3"))">Duffy - Mercy</button></p>
+<p>Click to play: <button id="soundButton" @onclick="@(() => PlaySound("./audio/U2 - With Or Without You.mp3"))">U2 - With Or Without You</button></p>
+<br/>
+
+<h6>If you don't want to display the player, remove controls. These buttons can be handy.</h6>
+<p>To pause <button id="soundButton" @onclick="PauseSound">Pause!</button> To resume click Play</p>
+<p>To stop <button id="soundButton" @onclick="StopSound">Stop!</button> It starts for the beginning when you click Play </p>
+
+@code {
+    public string Song { get; set; }
+    public async Task PlaySound(string songpath)
+    {
+        Song = songpath;
+        await Jsr.InvokeAsync<string>("PlayAudio", "audioplayer"); // this line loads the player. Press play to start.
+        await Jsr.InvokeAsync<string>("PlayAudio", "audioplayer"); // this double line loads and start it directly. 
+    }
+    public async Task StopSound()
+    {
+        await Jsr.InvokeAsync<string>("StopAudio", "audioplayer");
+    }
+    public async Task PauseSound()
+    {
+        await Jsr.InvokeAsync<string>("PauseAudio", "audioplayer");
+    }
+}
+<p style="color:olivedrab">Credits to: <a href="https://zditect.com/code/javascript/how-to-play-a-sound-with-blazor-and-javascript.html"><img src="./logo_red.png" /></a></p>
